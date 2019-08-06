@@ -1,5 +1,10 @@
 import unittest
 
+import warnings
+def warn(*args, **kwargs):
+    # Disable annoying deprecation warning
+    pass
+warnings.warn = warn
 
 class TestServer(unittest.TestCase):
 

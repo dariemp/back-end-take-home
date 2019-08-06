@@ -3,7 +3,7 @@ from server import create_app
 
 
 @unittest.skip('Not implemented yet')
-class TestAPI(unittest.TestCase):
+class TestServer(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
