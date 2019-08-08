@@ -1,6 +1,7 @@
 import os
 import csv
 
+
 class RoutesGraph(object):
 
     def __init__(self):
@@ -28,32 +29,38 @@ class RoutesGraph(object):
 
     def get_airport_connections(self, airport_code):
         try:
-            return self._airports_connections[airport_code]
+            return self._get_airport_connections(airport_code)
         except KeyError:
             from exceptions import AirportNotFound
             raise AirportNotFound()
 
+    def _get_airport_connections(self, airport_code):
+        return self._airports_connections[airport_code]
+
     def _get_route(self, origin_airport_code, destination_airport_code):
         visited_airports_set = set()
         queue = []
-        airport_code = origin_airport_code
+        route_data = self._traverse_airport_connections_data(
+            origin_airport_code, destination_airport_code, queue, visited_airports_set)
+        return self._build_route(route_data, destination_airport_code)
+
+    def _traverse_airport_connections_data(self, airport_code, destination_airport_code, queue, visited_airports_set):
         route_data = [(airport_code, None)]
         queue.append(route_data)
         while airport_code != destination_airport_code and len(queue) > 0:
-            route_data = self._explore_connections(route_data, visited_airports_set, queue)
+            self._traverse_airport_connections(route_data, visited_airports_set, queue)
+            route_data = queue.pop(0)
             airport_code = route_data[-1][0]
             visited_airports_set.add(airport_code)
-        return self._build_route(airport_code, destination_airport_code, route_data)
+        return route_data
 
-    def _explore_connections(self, route_data, visited_airports_set, queue):
+    def _traverse_airport_connections(self, route_data, visited_airports_set, queue):
         airport_code = route_data[-1][0]
-        airport_connections = self.get_airport_connections(airport_code)
+        airport_connections = self._get_airport_connections(airport_code)
         connections_not_visited = self._get_connections_not_visited(airport_connections, visited_airports_set)
         for connection_airport_code in connections_not_visited:
             connection_airline = airport_connections[connection_airport_code][0]
             self._add_connection_to_queue(connection_airport_code, connection_airline, route_data, queue)
-        route_data = queue.pop(0)
-        return route_data
 
     def _get_connections_not_visited(self, airport_connections, visited_airports_set):
         return set(airport_connections.keys()) - visited_airports_set
@@ -63,8 +70,9 @@ class RoutesGraph(object):
         connection_route_data = route_data + [route_entry]
         queue.append(connection_route_data)
 
-    def _build_route(self, last_airport_code, destination_airport_code, route_data):
-        if last_airport_code == destination_airport_code:
+    def _build_route(self, route_data, destination_airport_code):
+        airport_code = route_data[-1][0]
+        if airport_code == destination_airport_code:
             return self._build_route_from_data(route_data)
         return None
 
