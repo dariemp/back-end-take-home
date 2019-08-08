@@ -1,0 +1,2 @@
+class AirportNotFound(Exception):
+    pass
