@@ -21,9 +21,57 @@ class RoutesGraph(object):
         self._airlines = data_loader.load_airlines()
         self._airports_connections = data_loader.load_airports_and_routes(self._airlines)
 
+    def get_route(self, origin_airport_code, destination_airport_code):
+        if origin_airport_code == destination_airport_code:
+            raise Exception()
+        return self._get_route(origin_airport_code, destination_airport_code)
+
     def get_airport_connections(self, airport_code):
         try:
             return self._airports_connections[airport_code]
         except KeyError:
             from exceptions import AirportNotFound
             raise AirportNotFound()
+
+    def _get_route(self, origin_airport_code, destination_airport_code):
+        visited_airports_set = set()
+        queue = []
+        airport_code = origin_airport_code
+        route_data = [(airport_code, None)]
+        queue.append(route_data)
+        while airport_code != destination_airport_code and len(queue) > 0:
+            route_data = self._explore_connections(route_data, visited_airports_set, queue)
+            airport_code = route_data[-1][0]
+            visited_airports_set.add(airport_code)
+        if airport_code == destination_airport_code:
+            return self._build_route_from_data(route_data)
+        return None
+
+    def _get_connections_not_visited(self, airport_connections, visited_airports_set):
+         return set(airport_connections.keys()) - visited_airports_set
+
+    def _explore_connections(self, route_data, visited_airports_set, queue):
+        airport_code = route_data[-1][0]
+        airport_connections = self.get_airport_connections(airport_code)
+        connections_not_visited = self._get_connections_not_visited(airport_connections, visited_airports_set)
+        for connection_airport_code in connections_not_visited:
+            connection_airline = airport_connections[connection_airport_code][0]
+            route_entry = (connection_airport_code, connection_airline)
+            connection_route_data = route_data + [route_entry]
+            queue.append(connection_route_data)
+        route_data = queue.pop(0)
+        return route_data
+
+    def _build_route_from_data(self, route_data):
+        route = []
+        origin = route_data.pop(0)
+        while len(route_data) > 0:
+            destination = route_data.pop(0)
+            flight = {
+                'airline': destination[1],
+                'from': origin[0],
+                'to': destination[0]
+            }
+            route.append(flight)
+            origin = destination
+        return route
