@@ -1,6 +1,7 @@
 import unittest
 from routes_graph import RoutesGraph
 
+
 class RoutesGraphTestCase(unittest.TestCase):
 
     def test_load_data_with_test_data_fills_airlines(self):
@@ -8,7 +9,7 @@ class RoutesGraphTestCase(unittest.TestCase):
 
         os.environ['DATADIR'] = 'test'
         routes_graph = RoutesGraph()
-        self.assertTrue(routes_graph.airlines[0] == 'AC')
+        self.assertIn('AC', routes_graph.airlines)
 
     def test_load_data_with_full_data_loads_six_airlines(self):
         import os
@@ -22,7 +23,7 @@ class RoutesGraphTestCase(unittest.TestCase):
 
         os.environ['DATADIR'] = 'full'
         routes_graph = RoutesGraph()
-        self.assertEqual(routes_graph.airlines[3], 'TK')
+        self.assertIn('TK', routes_graph.airlines)
 
     def test_load_data_with_test_data_creates_adjacency_dict_of_lists_size_four(self):
         import os

@@ -3,7 +3,6 @@ from unittest.mock import patch
 from routes_graph import RoutesGraph
 
 
-
 @patch('csv.reader')
 @patch('%s.open' % __name__)
 class RoutesGraphTestCase(unittest.TestCase):
@@ -13,12 +12,12 @@ class RoutesGraphTestCase(unittest.TestCase):
                                                       ['Air Canada', 'AC', 'ACA', 'Canada'],
                                                       ['WestJet', 'WS', 'WJA','Canada']])
         routes_graph = RoutesGraph()
-        self.assertEqual(routes_graph.airlines, ['AC', 'WS'])
+        self.assertEqual(routes_graph.airlines, {'AC', 'WS'})
 
     def test_load_data_loads_airports(self, mock_open, mock_csv_reader):
         self._set_test_airports(mock_csv_reader)
         routes_graph = RoutesGraph()
-        self.assertEqual(routes_graph.airports, ['YYZ', 'BOG'])
+        self.assertEqual(routes_graph.airports, {'YYZ', 'BOG'})
 
     def test_get_airport_connections_returns_yyz(self, mock_open, mock_csv_reader):
         self._set_test_airports(mock_csv_reader)
