@@ -44,14 +44,14 @@ class RoutesGraphTestCase(unittest.TestCase):
 
         os.environ['DATADIR'] = 'test'
         routes_graph = RoutesGraph()
-        self.assertIsInstance(routes_graph.get_airport_connections('YYZ'), list)
+        self.assertIsInstance(routes_graph.get_airport_connections('YYZ'), dict)
 
     def test_get_airport_connections_with_full_data_returns_ykh(self):
         import os
 
         os.environ['DATADIR'] = 'full'
         routes_graph = RoutesGraph()
-        self.assertIsInstance(routes_graph.get_airport_connections('YKH'), list)
+        self.assertIsInstance(routes_graph.get_airport_connections('YKH'), dict)
 
     def test_get_airport_connections_with_test_data_raises_exception_when_unknown_airport(self):
         import os
@@ -70,3 +70,31 @@ class RoutesGraphTestCase(unittest.TestCase):
         routes_graph = RoutesGraph()
         with self.assertRaises(AirportNotFound):
             routes_graph.get_airport_connections('yyz')
+
+    def test_get_airport_connections_with_test_data_loads_all_yyz_connections(self):
+        import os
+
+        os.environ['DATADIR'] = 'test'
+        routes_graph = RoutesGraph()
+        self.assertEqual(routes_graph.get_airport_connections('YYZ'), {'JFK': ['AC']})
+
+    def test_get_airport_connections_with_test_data_loads_all_lax_connections(self):
+        import os
+
+        os.environ['DATADIR'] = 'test'
+        routes_graph = RoutesGraph()
+        self.assertEqual(routes_graph.get_airport_connections('LAX'), {'YVR': ['AC'], 'JFK': ['UA']})
+
+    def test_get_airport_connections_full_data_loads_all_yyz_connections(self):
+        import os
+
+        os.environ['DATADIR'] = 'full'
+        routes_graph = RoutesGraph()
+        self.assertEqual(len(routes_graph.get_airport_connections('YYZ')), 121)
+
+    def test_get_airport_connections_full_data_loads_all_jfk_connections(self):
+        import os
+
+        os.environ['DATADIR'] = 'full'
+        routes_graph = RoutesGraph()
+        self.assertEqual(len(routes_graph.get_airport_connections('JFK')), 22)

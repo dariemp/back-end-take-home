@@ -19,7 +19,7 @@ class RoutesGraph(object):
 
         data_loader = DataLoader()
         self._airlines = data_loader.load_airlines()
-        self._airports_connections = data_loader.load_airports()
+        self._airports_connections = data_loader.load_airports_and_routes(self._airlines)
 
     def get_airport_connections(self, airport_code):
         try:
