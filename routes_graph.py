@@ -32,21 +32,29 @@ class RoutesGraph(object):
         airlines_file_path = os.path.join(data_path, 'airlines.csv')
         self._load_airlines_from_csv(airlines_file_path)
 
-    def _load_airlines_from_csv(self, airlines_file_path):
-        with open(airlines_file_path, 'r', newline='') as f:
-            csv_reader = csv.reader(f)
-            next(csv_reader)
-            for row in csv_reader:
-                self._airlines.add(row[1])
-
     def _load_airports(self, data_path):
         self._airports_with_routes = {}
         airports_file_path = os.path.join(data_path, 'airports.csv')
         self._load_airports_from_csv(airports_file_path)
 
+    def _load_airlines_from_csv(self, airlines_file_path):
+        self._load_csv(airlines_file_path, self._load_airline)
+
     def _load_airports_from_csv(self, airports_file_path):
-        with open(airports_file_path, 'r', newline='') as f:
+        self._load_csv(airports_file_path, self._load_airport)
+
+    def _load_csv(self, file_path, row_proccessing_function):
+        with open(file_path, 'r', newline='') as f:
             csv_reader = csv.reader(f)
-            next(csv_reader)
+            self._skip_header(csv_reader)
             for row in csv_reader:
-                self._airports_with_routes[row[3]] = []
+                row_proccessing_function(row)
+
+    def _skip_header(self, csv_reader):
+        next(csv_reader)
+
+    def _load_airline(self, row):
+        self._airlines.add(row[1])
+
+    def _load_airport(self, row):
+        self._airports_with_routes[row[3]] = []
