@@ -5,7 +5,7 @@ class DataLoader(object):
 
     def __init__(self):
         data_sub_directory = os.environ.get('DATADIR', 'full')
-        self._data_path = os.path.join(os.getcwd(), 'data', data_sub_directory)
+        self._data_path = os.path.join(os.path.dirname(os.getcwd()), 'data', data_sub_directory)
 
     def load_airlines(self):
         airlines_file_path = os.path.join(self._data_path, 'airlines.csv')

@@ -89,7 +89,7 @@ class RouteResourceTestCase(unittest.TestCase):
         mock_graph = Mock()
         mock_graph.is_valid_airport.side_effect = lambda x: x != 'XXX'
         mock_graph.get_route.return_value = graph_get_route_response
-        with patch('routes_graph.RoutesGraph'):
+        with patch('server.RoutesGraph'):
             app = create_app()
             with app.test_request_context():
                 with patch('flask_restful.request.args.get') as mock_request_args_get:
