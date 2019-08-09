@@ -16,6 +16,6 @@
 
 `curl 'http://127.0.0.1:8000/route?origin=YYZ&destination=MEL'`
 
-or using any other HTTP client. You can also use the hosted version at **https://route-flights.herokuapp.com**:
+or using any other HTTP client. You can also use the hosted version at **<https://route-flights.herokuapp.com/route>**:
 
 `curl 'https://route-flights.herokuapp.com/route?origin=YYZ&destination=MEL'`
