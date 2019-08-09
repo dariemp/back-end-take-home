@@ -14,8 +14,3 @@ def create_app():
 
 def set_api_endpoints(api, routes_graph):
     api.add_resource(RouteResource, '/route', resource_class_kwargs={'routes_graph': routes_graph})
-
-
-if __name__ == "__main__":
-    app = create_app()
-    app.run()
