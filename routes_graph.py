@@ -44,7 +44,7 @@ class RoutesGraph(object):
         queue = []
         route_data = self._traverse_airport_connections_data(
             origin_airport_code, destination_airport_code, queue, visited_airports_set)
-        return self._build_route(route_data, destination_airport_code)
+        return self._return_route(route_data, destination_airport_code)
 
     def _traverse_airport_connections_data(self, airport_code, destination_airport_code, queue, visited_airports_set):
         route_data = [(airport_code, None)]
@@ -72,25 +72,8 @@ class RoutesGraph(object):
         connection_route_data = route_data + [route_entry]
         queue.append(connection_route_data)
 
-    def _build_route(self, route_data, destination_airport_code):
+    def _return_route(self, route_data, destination_airport_code):
         airport_code = route_data[-1][0]
         if airport_code == destination_airport_code:
-            return self._build_route_from_data(route_data)
+            return route_data
         return None
-
-    def _build_route_from_data(self, route_data):
-        route = []
-        next_airport = route_data.pop(0)
-        while len(route_data) > 0:
-            next_airport = self._add_connection_to_route(next_airport, route, route_data)
-        return route
-
-    def _add_connection_to_route(self, origin_airport, route, route_data):
-        destination = route_data.pop(0)
-        flight = {
-            'airline': destination[1],
-            'from': origin_airport[0],
-            'to': destination[0]
-        }
-        route.append(flight)
-        return destination

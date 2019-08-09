@@ -49,16 +49,14 @@ class RoutesGraphTestCase(unittest.TestCase):
         self._set_test_airports_connections(mock_load_airports_and_routes)
         routes_graph = RoutesGraph()
         route = routes_graph.get_route('YYZ', 'JFK')
-        expected_route = [{'airline': 'AC', 'from': 'YYZ', 'to': 'JFK'}]
+        expected_route = [('YYZ', None), ('JFK', 'AC')]
         self.assertEqual(expected_route, route)
 
     def test_get_route_returns_route_yyz_yvr(self, mock_load_airlines, mock_load_airports_and_routes):
         self._set_test_airports_connections(mock_load_airports_and_routes)
         routes_graph = RoutesGraph()
         route = routes_graph.get_route('YYZ', 'YVR')
-        expected_route = [{'airline': 'AC', 'from': 'YYZ', 'to': 'JFK'},
-                          {'airline': 'UA', 'from': 'JFK', 'to': 'LAX'},
-                          {'airline': 'AC', 'from': 'LAX', 'to': 'YVR'}]
+        expected_route = [('YYZ', None), ('JFK', 'AC'), ('LAX', 'UA'), ('YVR', 'AC')]
         self.assertEqual(expected_route, route)
 
     def test_get_route_raises_exception_if_origin_equals_destination(self, mock_load_airlines, mock_load_airports_and_routes):

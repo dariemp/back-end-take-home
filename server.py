@@ -1,17 +1,19 @@
 from flask import Flask
 from flask_restful import Api
 from route_resource import RouteResource
+from routes_graph import RoutesGraph
 
 
 def create_app():
     app = Flask(__name__)
     api = Api(app)
-    set_api_endpoints(api)
+    routes_graph = RoutesGraph()
+    set_api_endpoints(api, routes_graph)
     return app
 
 
-def set_api_endpoints(api):
-    api.add_resource(RouteResource, '/route')
+def set_api_endpoints(api, routes_graph):
+    api.add_resource(RouteResource, '/route', resource_class_kwargs={'routes_graph': routes_graph})
 
 
 if __name__ == "__main__":
