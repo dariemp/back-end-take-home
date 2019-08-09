@@ -9,12 +9,10 @@ class TestServer(unittest.TestCase):
         cls.app = create_app()
         cls.client = cls.app.test_client()
 
-    @unittest.skip('Not implemented yet')
-    def test_yyz_to_yyz_with_test_data_returns_404(self):
+    def test_yyz_to_yyz_with_test_data_returns_400(self):
         resp = self._send_request('YYZ', 'YYZ')
-        self.assertEqual(resp.status_code, 404)
+        self.assertEqual(resp.status_code, 400)
 
-    @unittest.skip('Not implemented yet')
     def test_yyz_to_yyz_with_test_data_returns_correct_error_message(self):
         resp = self._send_request('YYZ', 'YYZ')
         expected_data = {'message': 'Take the bus, please'}
@@ -47,26 +45,22 @@ class TestServer(unittest.TestCase):
         expected_data = {'message': 'No Route'}
         self.assertEqual(resp.json, expected_data)
 
-    @unittest.skip('Not implemented yet')
     def test_xxx_to_ord_with_test_data_returns_404(self):
         resp = self._send_request('XXX', 'ORD')
         self.assertEqual(resp.status_code, 404)
 
-    @unittest.skip('Not implemented yet')
     def test_xxx_to_ord_with_test_data_returns_correct_error_message(self):
         resp = self._send_request('XXX', 'ORD')
-        expected_data = {'message': 'Invalid origin: XXX'}
+        expected_data = {'message': 'Invalid Origin'}
         self.assertEqual(resp.json, expected_data)
 
-    @unittest.skip('Not implemented yet')
     def test_ord_to_xxx_with_test_data_returns_404(self):
         resp = self._send_request('ORD', 'XXX')
         self.assertEqual(resp.status_code, 404)
 
-    @unittest.skip('Not implemented yet')
     def test_ord_to_xxx_with_test_data_returns_correct_error_message(self):
         resp = self._send_request('ORD', 'XXX')
-        expected_data = {'message': 'Invalid destination: XXX'}
+        expected_data = {'message': 'Invalid Destination'}
         self.assertEqual(resp.json, expected_data)
 
     def _send_request(self, origin, destination):

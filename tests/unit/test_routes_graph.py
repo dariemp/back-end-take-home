@@ -72,6 +72,16 @@ class RoutesGraphTestCase(unittest.TestCase):
         routes_graph = RoutesGraph()
         self.assertIsNone(routes_graph.get_route('YYZ', 'ORD'))
 
+    def test_is_valid_airport_returns_true_if_airports_exists(self, mock_load_airlines, mock_load_airports_and_routes):
+        self._set_test_airports_connections(mock_load_airports_and_routes)
+        routes_graph = RoutesGraph()
+        self.assertTrue(routes_graph.is_valid_airport('YYZ'))
+
+    def test_is_valid_airport_returns_false_if_airports_does_not_exists(self, mock_load_airlines, mock_load_airports_and_routes):
+        self._set_test_airports_connections(mock_load_airports_and_routes)
+        routes_graph = RoutesGraph()
+        self.assertFalse(routes_graph.is_valid_airport('XXX'))
+
     def _set_test_airports_connections(self, mock_load_airports_and_routes):
         mock_load_airports_and_routes.return_value = {
             'YYZ': {'JFK': ['AC'],

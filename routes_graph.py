@@ -22,6 +22,9 @@ class RoutesGraph(object):
         self._airlines = data_loader.load_airlines()
         self._airports_connections = data_loader.load_airports_and_routes(self._airlines)
 
+    def is_valid_airport(self, airport_code):
+        return airport_code in self._airports_connections
+
     def get_route(self, origin_airport_code, destination_airport_code):
         from exceptions import OriginEqualsDestination
 
