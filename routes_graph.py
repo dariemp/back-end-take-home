@@ -30,14 +30,14 @@ class RoutesGraph(object):
         return self._get_route(origin_airport_code, destination_airport_code)
 
     def get_airport_connections(self, airport_code):
+        return self._get_airport_connections(airport_code)
+
+    def _get_airport_connections(self, airport_code):
         try:
-            return self._get_airport_connections(airport_code)
+            return self._airports_connections[airport_code]
         except KeyError:
             from exceptions import AirportNotFound
             raise AirportNotFound()
-
-    def _get_airport_connections(self, airport_code):
-        return self._airports_connections[airport_code]
 
     def _get_route(self, origin_airport_code, destination_airport_code):
         visited_airports_set = set()

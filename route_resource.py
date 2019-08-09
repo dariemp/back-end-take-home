@@ -10,13 +10,13 @@ class RouteResource(Resource):
         origin = request.args.get('origin')
         destination = request.args.get('destination')
         route_data = self._routes_graph.get_route(origin, destination)
-        return self._build_route(route_data, destination)
+        return self._build_response(route_data, destination)
 
-    def _build_route(self, route_data, destination_airport_code):
-        airport_code = route_data[-1][0]
-        if airport_code == destination_airport_code:
+    def _build_response(self, route_data, destination_airport_code):
+        if route_data and route_data[-1][0] == destination_airport_code:
             return {'route': self._build_route_from_data(route_data)}
-        return None
+        else:
+            return {'message': 'No Route'}, 404
 
     def _build_route_from_data(self, route_data):
         route = []

@@ -32,6 +32,18 @@ class RouteResourceTestCase(unittest.TestCase):
         }
         self.assertEqual(expected_response, response)
 
+    def test_get_returns_404_when_route_does_not_exis(self):
+        get_request_args = {'origin': 'YYZ', 'destination': 'EOH'}
+        graph_get_route_response = None
+        response = self._mock_get_request(get_request_args, graph_get_route_response)
+        self.assertEqual(response[1], 404)
+
+    def test_get_returns_error_message_when_route_does_not_exist(self):
+        get_request_args = {'origin': 'YYZ', 'destination': 'EOH'}
+        graph_get_route_response = None
+        response = self._mock_get_request(get_request_args, graph_get_route_response)
+        self.assertEqual(response[0], {'message': 'No Route'})
+
     def _mock_get_request(self, get_request_args, graph_get_route_response):
         mock_graph = Mock()
         mock_graph.get_route.return_value = graph_get_route_response

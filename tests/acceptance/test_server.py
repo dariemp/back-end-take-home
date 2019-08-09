@@ -38,15 +38,13 @@ class TestServer(unittest.TestCase):
         expected_data = {'route': [{'airline':'AC', 'from':'YYZ', 'to':'YVR'}]}
         self.assertEqual(resp.json, expected_data)
 
-    @unittest.skip('Not implemented yet')
     def test_yyz_to_ord_with_test_data_returns_404(self):
-        resp = self._send_request('YYZ', 'ORD')
+        resp = self._send_request('YYZ', 'EOH')
         self.assertEqual(resp.status_code, 404)
 
-    @unittest.skip('Not implemented yet')
     def test_yyz_to_ord_with_test_data_returns_correct_error_message(self):
-        resp = self._send_request('YYZ', 'ORD')
-        expected_data = {'message': 'No route from YYZ to ORD'}
+        resp = self._send_request('YYZ', 'EOH')
+        expected_data = {'message': 'No Route'}
         self.assertEqual(resp.json, expected_data)
 
     @unittest.skip('Not implemented yet')

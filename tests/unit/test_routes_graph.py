@@ -16,7 +16,7 @@ class RoutesGraphTestCase(unittest.TestCase):
     def test_load_data_loads_airports(self, mock_load_airlines, mock_load_airports_and_routes):
         self._set_test_airports_connections(mock_load_airports_and_routes)
         routes_graph = RoutesGraph()
-        self.assertEqual(routes_graph.airports, {'YYZ', 'BOG', 'LAX', 'JFK'})
+        self.assertEqual(routes_graph.airports, {'YYZ', 'BOG', 'LAX', 'JFK', 'YVR'})
 
     def test_get_airport_connections_returns_yyz(self, mock_load_airlines, mock_load_airports_and_routes):
         self._set_test_airports_connections(mock_load_airports_and_routes)
@@ -67,10 +67,19 @@ class RoutesGraphTestCase(unittest.TestCase):
         with self.assertRaises(OriginEqualsDestination):
             routes_graph.get_route('YYZ', 'YYZ')
 
+    def test_get_route_returns_none_if_route_not_found(self, mock_load_airlines, mock_load_airports_and_routes):
+        self._set_test_airports_connections(mock_load_airports_and_routes)
+        routes_graph = RoutesGraph()
+        self.assertIsNone(routes_graph.get_route('YYZ', 'ORD'))
+
     def _set_test_airports_connections(self, mock_load_airports_and_routes):
         mock_load_airports_and_routes.return_value = {
-            'YYZ': {'JFK': ['AC']},
-            'JFK': {'LAX': ['UA']},
-            'LAX': {'YVR': ['AC']},
+            'YYZ': {'JFK': ['AC'],
+                    'BOG': ['AC']},
+            'JFK': {'YYZ': ['AC'],
+                    'LAX': ['UA']},
+            'LAX': {'JFK': ['UA'],
+                    'YVR': ['AC']},
+            'YVR': {'LAX': ['AC']},
             'BOG': {'YYZ': ['AC']}
         }
