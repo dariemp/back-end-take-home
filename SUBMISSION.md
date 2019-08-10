@@ -4,6 +4,24 @@
 
 `git clone https://github.com/dariemp/back-end-take-home.git`
 
+## Create a Python 3 virtual environment with Conda or Virtualenv
+
+- With Conda: `conda create -n venv python=3.7`
+
+- With Virtualenv:  `virtualenv venv -p <path/to/python3.7/interpreter>`
+
+## Activate your virtual environment
+
+- With Conda: `conda activate venv`
+
+- With Virtualenv: `source venv/bin/activate`
+
+## Install dependencies in your virtualenv
+
+`cd back-end-take-home`
+
+`pip install -r requirements.txt`
+
 ## Change to src directory
 
 `cd src`
