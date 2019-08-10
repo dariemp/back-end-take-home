@@ -18,6 +18,24 @@ class RouteResourceTestCase(unittest.TestCase):
         }
         self.assertEqual(expected_response, response)
 
+    def test_get_returns_route_with_lower_case_origin(self):
+        get_request_args = {'origin': 'yyz', 'destination': 'JFK'}
+        graph_get_route_response = [('YYZ', None), ('JFK', 'AC')]
+        response = self._mock_get_request(get_request_args, graph_get_route_response)
+        expected_response = {
+            'route': [{'airline': 'AC', 'from': 'YYZ', 'to': 'JFK'}]
+        }
+        self.assertEqual(expected_response, response)
+
+    def test_get_returns_route_with_lower_case_destination(self):
+        get_request_args = {'origin': 'YYZ', 'destination': 'jfk'}
+        graph_get_route_response = [('YYZ', None), ('JFK', 'AC')]
+        response = self._mock_get_request(get_request_args, graph_get_route_response)
+        expected_response = {
+            'route': [{'airline': 'AC', 'from': 'YYZ', 'to': 'JFK'}]
+        }
+        self.assertEqual(expected_response, response)
+
     def test_get_returns_route_yyz_yvr(self):
         get_request_args = {'origin': 'YYZ', 'destination': 'YVR'}
         graph_get_route_response = [('YYZ', None), ('JFK', 'AC'), ('LAX', 'UA'), ('YVR', 'AC')]
