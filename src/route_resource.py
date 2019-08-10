@@ -27,24 +27,20 @@ class RouteResource(Resource):
         return origin, destination
 
     def _validate_origin(self, origin):
-        from exceptions import InvalidInput
-
-        if not origin:
-            raise InvalidInput(400, 'Missing origin airport')
-        origin = origin.upper()
-        if not self._routes_graph.is_valid_airport(origin):
-            raise InvalidInput(404, 'Invalid Origin')
-        return origin
+        return self._validate_airport_code(origin, 'origin')
 
     def _validate_destination(self, destination):
+        return self._validate_airport_code(destination, 'destination')
+
+    def _validate_airport_code(self, airport_code, endpoint_type):
         from exceptions import InvalidInput
 
-        if not destination:
-            raise InvalidInput(400, 'Missing destination airport')
-        destination = destination.upper()
-        if not self._routes_graph.is_valid_airport(destination):
-            raise InvalidInput(404, 'Invalid Destination')
-        return destination
+        if not airport_code:
+            raise InvalidInput(400, 'Missing {} airport'.format(endpoint_type))
+        airport_code = airport_code.upper()
+        if not self._routes_graph.is_valid_airport(airport_code):
+            raise InvalidInput(404, 'Invalid {}'.format(endpoint_type.title()))
+        return airport_code
 
     def _build_response(self, route_data, destination_airport_code):
         if route_data and route_data[-1][0] == destination_airport_code:
